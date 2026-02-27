@@ -21,11 +21,26 @@ HIDDEN='\033[8m'      # скрытый текст
 STRIKE='\033[9m'
 
 
-printf $CYAN$BOLD'PC Stats Script for Linux\n'
+printf 'PC Stats Script for Linux\n'
 #sleep 0.4
 
 
 # CPU Status
-printf $DIM"Total CPU Load: "
-printf $BOLD$YELLOW"$(top -bn1 | awk '/Cpu/ {print 100 - $8}')%%\n"
+printf "CPU Load Percent: "
+printf "$(top -bn1 | awk '/Cpu/ {print 100 - $8}')\045\n" # 045 - символ процента, так как обычный % воспринимается как команда
+
+
+echo ""
+echo ""
+# RAM Status
+printf "RAM Load (Mib & Percents:)\n"
+free -m | awk 'NR==2 {
+total=$2
+used=$3
+aval=$6
+usedPercents=int((used/total)*100)
+avalPercents=int((aval/total)*100)
+print "Used: " used"/"total " Mib (" usedPercents "%)\n"
+print "Available: " aval " Mib (" avalPercents "%)\n"
+}'
 
